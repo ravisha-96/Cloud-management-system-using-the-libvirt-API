@@ -14,8 +14,9 @@ while True:
 Create a socket object  
 s = socket.socket()          
 s.setsockopt( socket.SOL_SOCKET, socket.SO_REUSEADDR, 1 ) 
-# Define the port on which you want to connect  
-port = 12346          
+# Define the port on which you want to connect
+server_addresses = [('192.168.122.55', 12345), ('192.168.122.56', 12346)]  
+port = 12345          
 # mode = "high"
 # connect to the server on local computer  
 s.connect(('192.168.122.56', port))  

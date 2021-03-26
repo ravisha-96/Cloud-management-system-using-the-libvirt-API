@@ -13,6 +13,7 @@ class Monitor:
 		self.dom_objects = list()
 		self.is_scaled = False
 		self.thresold = 65
+		self.count_above_thresold = 0
 		
 	def connect_to_qemu(self):
 		self.conn = libvirt.open('qemu:///system')
@@ -49,8 +50,12 @@ class Monitor:
 		dom = self.connect_to_domain(self.domain_names[0])
 		self.dom_objects.append(dom)
 
-		while(True and self.cpu_utilization < self.thresold):
+		while(True and self.count_above_thresold<2 ):
 			self.cpu_utilization = self.get_cpu_utilization(dom)
+			if self.cpu_utilization > self.thresold:
+				self.count_above_thresold = self.count_above_thresold +1
+			else:
+				self.count_above_thresold = max(self.count_above_thresold-1, 0)
 			print('{0} cpu_utilization : {1}'.format(self.domain_names[0], self.cpu_utilization ))
 			#How to handle(display) the cpu utilization of the two domain_names
 		self.handle_upscaling()
